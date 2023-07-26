@@ -103,14 +103,13 @@ impl ConnectionHandler {
                     thread::sleep(timeout);
                     continue;
                 }
-                Err(e) if e.kind() == io::ErrorKind::BrokenPipe => {
+                Err(e) => {
                     self.signal(Event::Disconnect(
                         self.id,
-                        "BrokenPipe".into(),
+                        e.kind().to_string(),
                     ));
                     break;
                 }
-                Err(e) => panic!("[Handler] {:?}", e),
             }
         }
     }
